@@ -21,13 +21,39 @@ class ChatPage extends React.Component {
     this.handleMessageSeen = this.handleMessageSeen.bind(this);
   }
 
+  async checkIfUserWasDisconnect(user) {
+    try {
+      const response = await fetch('/check-user', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user),
+      });
+
+      if (response.status !== 200) {
+        this.props.history.push('/', { user: false });
+      }
+    } catch (error) {
+      console.log('Server error occured');
+    }
+  }
+
   componentDidMount() {
     const isStateSent = this.props.location.state !== undefined;
     const user = isStateSent ? this.props.location.state.user : false;
 
     if (!user) {
-      this.props.history.push('/');
+      this.props.history.push('/', { user: false });
     } else {
+      this.checkIfUserWasDisconnect(user);
+
+      window.onpopstate = () => {
+        // disconnect if the back button was pressed
+        if (this.state.socket) {
+          this.state.socket.disconnect();
+        }
+        this.props.history.push('/', { user: false });
+      };
+
       this.setState(
         {
           user,
