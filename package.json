@@ -8,7 +8,7 @@
     "server": "nodemon server/server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "start": "node server/server.js",
-    "heroku-postbuild": "cd public && yarn build"
+    // "heroku-postbuild": "cd public && yarn build"
   },
   "engines": {
     "node": "12.16.3"
