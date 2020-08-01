@@ -57,7 +57,7 @@ class ChatPage extends React.Component {
       this.setState(
         {
           user,
-          socket: io('http://localhost:5000'),
+          socket: io(),
         },
         () => {
           const socket = this.state.socket;
