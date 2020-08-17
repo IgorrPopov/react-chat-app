@@ -13,17 +13,18 @@ class ChatMessagesList extends React.Component {
 
   render() {
     return (
-      <div className="p-3 chat-messages-wrapper">
-        {(this.props.messages || []).map((message, index) => (
-          <ChatMessage
-            user={this.props.user}
-            handleMessageSeen={this.props.handleMessageSeen}
-            key={index}
-            index={index}
-            message={message}
-          />
-        )) || null}
-      </div>
+      // <div className="p-3 chat-messages-wrapper">
+      //   {(this.props.messages || []).map((message, index) => (
+      //     <ChatMessage
+      //       user={this.props.user}
+      //       handleMessageSeen={this.props.handleMessageSeen}
+      //       key={index}
+      //       index={index}
+      //       message={message}
+      //     />
+      //   )) || null}
+      // </div>
+      <h1>Hello</h1>
     );
   }
 }
