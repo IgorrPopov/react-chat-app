@@ -33,7 +33,7 @@ class ChatPage extends React.Component {
       socket: false,
       users: [],
       // messages,
-      messages: [],
+      messages: {},
     };
 
     this.handleCompanionChange = this.handleCompanionChange.bind(this);
@@ -58,7 +58,7 @@ class ChatPage extends React.Component {
   // }
 
   componentDidMount() {
-    console.log('process.env.CHAT_APP_URL: ', process.env.NODE_ENV);
+    // console.log('process.env.CHAT_APP_URL: ', process.env.NODE_ENV);
 
     // const isStateSent = this.props.location.state !== undefined;
     // const user = isStateSent ? this.props.location.state.user : false;
@@ -201,10 +201,10 @@ class ChatPage extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    console.log('componentWillUnmount');
-    localStorage.setItem('messages', JSON.stringify(this.state.messages));
-  }
+  // componentWillUnmount() {
+  //   console.log('componentWillUnmount');
+  //   localStorage.setItem('messages', JSON.stringify(this.state.messages));
+  // }
 
   handleCompanionChange(newCompanion) {
     if (this.state.companion.id !== newCompanion.id) {
