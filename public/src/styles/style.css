@@ -1,5 +1,6 @@
 html {
   overflow: hidden;
+  min-height: 568px;
 }
 
 .container {

@@ -22,7 +22,7 @@ class ChatMessagesList extends React.Component {
             index={index}
             message={message}
           />
-        ))}
+        )) || null}
       </div>
     );
   }

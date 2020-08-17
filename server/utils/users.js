@@ -7,23 +7,23 @@ const users = [];
 
 const addUser = (newUser) => {
   if (newUser.id === undefined) {
-    console.log('if');
+    // console.log('if');
     newUser.id = uuidv4();
     users.push(newUser);
   } else {
-    console.log('else');
+    // console.log('else');
     const index = users.findIndex((user) => user.id === newUser.id);
 
     if (index !== -1) {
-      console.log('if (index !== -1): ');
-      console.log('index: ', index);
+      // console.log('if (index !== -1): ');
+      // console.log('index: ', index);
       users[index] = newUser;
     } else {
       users.push(newUser);
     }
   }
 
-  console.log('users: ', users);
+  // console.log('users: ', users);
 
   return newUser;
 };
