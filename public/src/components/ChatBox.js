@@ -10,24 +10,6 @@ const ChatBox = ({
   handleMessageSeen,
   handleMessageSend,
 } = {}) => (
-  // <div className="d-flex flex-column position-relative chat-box-wrapper">
-  //   <ChatBoxHeader companion={companion} />
-  //   {!companion.hasLeft || (
-  //     <div className="user-left-message">
-  //       {`${companion.name} has left the chat`}
-  //     </div>
-  //   )}
-  //   {!companion.hasLeft === undefined || (
-  //     <>
-  //       <ChatMessagesList
-  //         user={user}
-  //         messages={messages}
-  //         handleMessageSeen={handleMessageSeen}
-  //       />
-  //       <ChatForm handleMessageSend={handleMessageSend} />
-  //     </>
-  //   )}
-  // </div>
   <div className="d-flex flex-column position-relative chat-box-wrapper">
     <ChatBoxHeader companion={companion} />
     {companion.hasLeft ? (
@@ -48,3 +30,22 @@ const ChatBox = ({
 );
 
 export default ChatBox;
+
+// <div className="d-flex flex-column position-relative chat-box-wrapper">
+//   <ChatBoxHeader companion={companion} />
+//   {!companion.hasLeft || (
+//     <div className="user-left-message">
+//       {`${companion.name} has left the chat`}
+//     </div>
+//   )}
+//   {!companion.hasLeft === undefined || (
+//     <>
+//       <ChatMessagesList
+//         user={user}
+//         messages={messages}
+//         handleMessageSeen={handleMessageSeen}
+//       />
+//       <ChatForm handleMessageSend={handleMessageSend} />
+//     </>
+//   )}
+// </div>
