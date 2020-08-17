@@ -14,12 +14,13 @@ const socketioConnectionLogic = (server) => {
   const io = socketio(server);
   // connection
   io.on('connection', (socket) => {
-    console.log('New websocket connection ' + socket.id);
+    // console.log('New websocket connection! socket.id: ' + socket.id);
 
     socket.on('join', (user_id) => {
       if (isUserExists(user_id)) {
         const newUser = addUserSocketId(user_id, socket.id);
         socket.broadcast.emit('new_user_connected', newUser);
+        // console.log('New user added! name: ' + newUser.name);
       }
     });
 
@@ -60,11 +61,18 @@ const socketioConnectionLogic = (server) => {
     });
 
     socket.on('disconnect', () => {
-      const user = findUserBySocketId(socket.id);
-      if (user) {
-        removeUser(user.id);
-        socket.broadcast.emit('user_disconnected', user.id);
-      }
+      const disconnectedUser = findUserBySocketId(socket.id);
+
+      addUserSocketId(disconnectedUser.id, false);
+      // check if the user reconnected after 10 seconds
+      setTimeout(() => {
+        const user = findUserById(disconnectedUser.id);
+
+        if (user && !user.socket_id) {
+          removeUser(user.id);
+          socket.broadcast.emit('user_disconnected', user.id);
+        }
+      }, 10000);
     });
   });
 };

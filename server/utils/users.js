@@ -5,10 +5,27 @@ const countriesList = require('./countries-list');
 
 const users = [];
 
-const addUser = (user) => {
-  user.id = uuidv4();
-  users.push(user);
-  return user;
+const addUser = (newUser) => {
+  if (newUser.id === undefined) {
+    console.log('if');
+    newUser.id = uuidv4();
+    users.push(newUser);
+  } else {
+    console.log('else');
+    const index = users.findIndex((user) => user.id === newUser.id);
+
+    if (index !== -1) {
+      console.log('if (index !== -1): ');
+      console.log('index: ', index);
+      users[index] = newUser;
+    } else {
+      users.push(newUser);
+    }
+  }
+
+  console.log('users: ', users);
+
+  return newUser;
 };
 
 const isUserExists = (id) => {

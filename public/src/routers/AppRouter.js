@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Loader from '../components/Loader';
 import LoginPage from '../components/LoginPage';
+import NotFoundPage from '../components/NotFoundPage';
 
 const ChatPage = React.lazy(() => import('../components/ChatPage'));
 
@@ -11,6 +12,7 @@ const AppRouter = () => (
       <Switch>
         <Route path="/" component={LoginPage} exact={true} />
         <Route path="/chat" component={ChatPage} />
+        <Route path="*" component={NotFoundPage} />
       </Switch>
     </React.Suspense>
   </BrowserRouter>

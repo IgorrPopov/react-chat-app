@@ -94,6 +94,14 @@ class LoginForm extends React.Component {
     let user = { ...this.state };
     delete user.avatarsList;
 
+    const previouslyLoggedUser = JSON.parse(
+      sessionStorage.getItem('user') || false
+    );
+
+    if (previouslyLoggedUser) {
+      user.id = previouslyLoggedUser.id;
+    }
+
     try {
       const response = await fetch('/login', {
         method: 'post',
@@ -103,7 +111,9 @@ class LoginForm extends React.Component {
 
       if (response.status === 201) {
         user = await response.json();
-        this.props.history.push('/chat', { user });
+        // localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('user', JSON.stringify(user));
+        this.props.history.push('/chat');
       }
 
       if (response.status === 400) {

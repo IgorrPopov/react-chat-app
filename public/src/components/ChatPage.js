@@ -8,12 +8,32 @@ class ChatPage extends React.Component {
   constructor(props) {
     super(props);
 
+    // let messages = {};
+
+    // console.log(
+    //   'localStorage.getItem("messages"): ',
+    //   localStorage.getItem('messages')
+    // );
+    // console.log(
+    //   'typeof localStorage.getItem("messages")',
+    //   typeof localStorage.getItem('messages')
+    // );
+
+    // if (
+    //   localStorage.getItem('messages') !== null &&
+    //   localStorage.getItem('messages') !== 'null'
+    // ) {
+    //   console.log('if');
+    //   messages = JSON.parse(localStorage.getItem('messages'));
+    // }
+
     this.state = {
       user: false,
       companion: false,
       socket: false,
       users: [],
-      messages: {},
+      // messages,
+      messages: [],
     };
 
     this.handleCompanionChange = this.handleCompanionChange.bind(this);
@@ -21,49 +41,63 @@ class ChatPage extends React.Component {
     this.handleMessageSeen = this.handleMessageSeen.bind(this);
   }
 
-  async checkIfUserWasDisconnect(user) {
-    try {
-      const response = await fetch('/check-user', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user),
-      });
+  // async checkIfUserWasDisconnect(user) {
+  //   try {
+  //     const response = await fetch('/check-user', {
+  //       method: 'post',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(user),
+  //     });
 
-      if (response.status !== 200) {
-        this.props.history.push('/', { user: false });
-      }
-    } catch (error) {
-      console.log('Server error occured');
-    }
-  }
+  //     if (response.status !== 200) {
+  //       this.props.history.push('/', { user: false });
+  //     }
+  //   } catch (error) {
+  //     console.log('Server error occured');
+  //   }
+  // }
 
   componentDidMount() {
-    const isStateSent = this.props.location.state !== undefined;
-    const user = isStateSent ? this.props.location.state.user : false;
+    console.log('process.env.CHAT_APP_URL: ', process.env.NODE_ENV);
+
+    // const isStateSent = this.props.location.state !== undefined;
+    // const user = isStateSent ? this.props.location.state.user : false;
+
+    // const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(sessionStorage.getItem('user'));
 
     if (!user) {
       this.props.history.push('/', { user: false });
     } else {
-      this.checkIfUserWasDisconnect(user);
+      // this.checkIfUserWasDisconnect(user);
 
-      window.onpopstate = () => {
-        // disconnect if the back button was pressed
-        if (this.state.socket) {
-          this.state.socket.disconnect();
-        }
-        this.props.history.push('/', { user: false });
-      };
+      // window.onpopstate = () => {
+      //   // disconnect if the back button was pressed
+      //   if (this.state.socket) {
+      //     this.state.socket.disconnect();
+      //   }
+      //   this.props.history.push('/', { user: false });
+      // };
 
       this.setState(
         {
           user,
-          socket: io(),
+          socket: io(
+            process.env.NODE_ENV === 'development'
+              ? 'http://localhost:5000'
+              : ''
+          ),
         },
         () => {
           const socket = this.state.socket;
 
           socket.emit('join', this.state.user.id);
           socket.emit('load_connected_users', this.state.user.id);
+
+          socket.on('reconnect', () => {
+            console.log('socket.on("reconnect"');
+            socket.emit('join', this.state.user.id);
+          });
 
           socket.on('load_connected_users', (connectedUsers) => {
             this.setState({
@@ -72,12 +106,56 @@ class ChatPage extends React.Component {
           });
 
           socket.on('new_user_connected', (newUser) => {
-            this.setState({
-              users: [...this.state.users, newUser],
-            });
+            const users = this.state.users;
+            const index = users.findIndex((user) => user.id === newUser.id);
+
+            if (index !== -1) {
+              const replacer = (key, value) =>
+                key === 'socket_id' ? undefined : value;
+
+              const ifSameUser =
+                JSON.stringify(newUser, replacer) ===
+                JSON.stringify(users[index], replacer);
+
+              // console.log('ifSameUser: ', ifSameUser);
+              // console.log(
+              //   ' JSON.stringify(newUser): ',
+              //   JSON.stringify(newUser)
+              // );
+              // console.log(
+              //   'JSON.stringify(users[index]): ',
+              //   JSON.stringify(users[index])
+              // );
+
+              if (!ifSameUser) {
+                const messages = this.state.messages;
+                delete messages[newUser.id];
+                const companion = this.state.companion || {};
+                companion.hasLeft = true;
+                this.setState({ messages, companion });
+              }
+
+              users[index] = newUser;
+            }
+
+            if (index === -1) {
+              users.push(newUser);
+            }
+
+            console.log('users: ', users);
+
+            this.setState({ users });
           });
 
           socket.on('user_disconnected', (user_id) => {
+            console.log('user_id: ', user_id);
+            console.log('this.state.user.id: ', this.state.user.id);
+
+            if (user_id === this.state.user.id) {
+              console.log('return;');
+              return;
+            }
+
             const users = this.state.users.filter(
               (user) => user.id !== user_id
             );
@@ -85,8 +163,11 @@ class ChatPage extends React.Component {
             const messages = this.state.messages;
             delete messages[user_id];
 
-            const companion = this.state.companion || {};
-            companion.hasLeft = true;
+            const companion = this.state.companion;
+
+            if (companion && companion.id !== this.state.user) {
+              companion.hasLeft = true;
+            }
 
             this.setState({ users, messages, companion });
           });
@@ -118,6 +199,11 @@ class ChatPage extends React.Component {
         }
       );
     }
+  }
+
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+    localStorage.setItem('messages', JSON.stringify(this.state.messages));
   }
 
   handleCompanionChange(newCompanion) {
