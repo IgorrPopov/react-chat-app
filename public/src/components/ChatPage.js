@@ -82,11 +82,12 @@ class ChatPage extends React.Component {
       this.setState(
         {
           user,
-          socket: io(
-            process.env.NODE_ENV === 'development'
-              ? 'http://localhost:5000'
-              : ''
-          ),
+          // socket: io(
+          //   process.env.NODE_ENV === 'development'
+          //     ? 'http://localhost:5000'
+          //     : ''
+          // ),
+          socket: io(),
         },
         () => {
           const socket = this.state.socket;
@@ -142,7 +143,7 @@ class ChatPage extends React.Component {
               users.push(newUser);
             }
 
-            console.log('users: ', users);
+            // console.log('users: ', users);
 
             this.setState({ users });
           });
