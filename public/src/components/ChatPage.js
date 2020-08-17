@@ -166,7 +166,11 @@ class ChatPage extends React.Component {
 
             const companion = this.state.companion;
 
-            if (companion && companion.id !== this.state.user) {
+            if (
+              companion &&
+              companion.id !== this.state.user &&
+              companion.id === user_id
+            ) {
               companion.hasLeft = true;
             }
 
