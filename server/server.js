@@ -23,15 +23,15 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.post('/check-user', (req, res) => {
-  const user = req.body;
+// app.post('/check-user', (req, res) => {
+//   const user = req.body;
 
-  if (!isUserExists(user.id)) {
-    res.status(401).send();
-  }
+//   if (!isUserExists(user.id)) {
+//     res.status(401).send();
+//   }
 
-  res.send();
-});
+//   res.send();
+// });
 
 app.post('/login', (req, res) => {
   const checkedUser = checkNewUser(req.body);

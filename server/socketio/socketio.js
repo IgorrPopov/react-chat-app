@@ -1,5 +1,7 @@
 const socketio = require('socket.io');
 const {
+  checkNewUser,
+  addUser,
   removeUser,
   isUserExists,
   addUserSocketId,
@@ -14,13 +16,23 @@ const socketioConnectionLogic = (server) => {
   const io = socketio(server);
   // connection
   io.on('connection', (socket) => {
-    // console.log('New websocket connection! socket.id: ' + socket.id);
+    socket.on('join', (user) => {
+      const user_id = { user };
 
-    socket.on('join', (user_id) => {
       if (isUserExists(user_id)) {
         const newUser = addUserSocketId(user_id, socket.id);
         socket.broadcast.emit('new_user_connected', newUser);
-        // console.log('New user added! name: ' + newUser.name);
+      } else {
+        const checkedReconnectedUser = checkNewUser(user);
+
+        if (!checkedReconnectedUser.errors) {
+          const reconnectedUser = checkedReconnectedUser.user;
+          reconnectedUser.id = user_id;
+          addUser(reconnectedUser);
+          socket.broadcast.emit('new_user_connected', reconnectedUser);
+        } else {
+          socket.emit('logout');
+        }
       }
     });
 

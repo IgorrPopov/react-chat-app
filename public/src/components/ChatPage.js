@@ -92,12 +92,18 @@ class ChatPage extends React.Component {
         () => {
           const socket = this.state.socket;
 
-          socket.emit('join', this.state.user.id);
+          socket.emit('join', this.state.user);
           socket.emit('load_connected_users', this.state.user.id);
 
           socket.on('reconnect', () => {
             console.log('socket.on("reconnect"');
-            socket.emit('join', this.state.user.id);
+            socket.emit('join', this.state.user);
+            socket.emit('load_connected_users', this.state.user.id);
+          });
+
+          socket.on('logout', () => {
+            sessionStorage.removeItem('user');
+            this.props.history.push('/');
           });
 
           socket.on('load_connected_users', (connectedUsers) => {
@@ -128,12 +134,16 @@ class ChatPage extends React.Component {
               //   JSON.stringify(users[index])
               // );
 
+              const companion = this.state.companion || {};
+
               if (!ifSameUser) {
                 const messages = this.state.messages;
                 delete messages[newUser.id];
-                const companion = this.state.companion || {};
                 companion.hasLeft = true;
                 this.setState({ messages, companion });
+              } else {
+                companion.hasLeft = false;
+                this.setState({ companion });
               }
 
               users[index] = newUser;
