@@ -15,7 +15,7 @@ html {
 #loginPageWrapper,
 #chatPageWrapper {
   position: relative;
-  background: url('/images/background/squares.jpg');
+  /* background: url('/images/background/squares.jpg'); */
   min-height: 100vh;
 }
 
