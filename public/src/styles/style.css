@@ -70,7 +70,7 @@ html {
 }
 
 .small-avatar-img {
-  height: 35px;
+  height: 30px;
   overflow: hidden;
 }
 
@@ -266,7 +266,6 @@ html {
 }
 
 .chat-box-wrapper {
-  background: url('/images/background/mountains.jpg');
   background-position: center;
   background-repeat: no-repeat;
   min-height: 80vh;
@@ -342,7 +341,6 @@ html {
 }
 
 .user-left-message {
-  color: white;
   font-weight: bold;
   z-index: 1;
   background-color: #00adff8c;

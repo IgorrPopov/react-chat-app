@@ -8,31 +8,11 @@ class ChatPage extends React.Component {
   constructor(props) {
     super(props);
 
-    // let messages = {};
-
-    // console.log(
-    //   'localStorage.getItem("messages"): ',
-    //   localStorage.getItem('messages')
-    // );
-    // console.log(
-    //   'typeof localStorage.getItem("messages")',
-    //   typeof localStorage.getItem('messages')
-    // );
-
-    // if (
-    //   localStorage.getItem('messages') !== null &&
-    //   localStorage.getItem('messages') !== 'null'
-    // ) {
-    //   console.log('if');
-    //   messages = JSON.parse(localStorage.getItem('messages'));
-    // }
-
     this.state = {
       user: false,
       companion: false,
       socket: false,
       users: [],
-      // messages,
       messages: {},
     };
 
@@ -58,12 +38,6 @@ class ChatPage extends React.Component {
   // }
 
   componentDidMount() {
-    // console.log('process.env.CHAT_APP_URL: ', process.env.NODE_ENV);
-
-    // const isStateSent = this.props.location.state !== undefined;
-    // const user = isStateSent ? this.props.location.state.user : false;
-
-    // const user = JSON.parse(localStorage.getItem('user'));
     const user = JSON.parse(sessionStorage.getItem('user'));
 
     if (!user) {
@@ -79,15 +53,14 @@ class ChatPage extends React.Component {
       //   this.props.history.push('/', { user: false });
       // };
 
+      console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+
+      // const socketIoUrl = process.env.NODE_ENV === 'development' : 'http://localhost:5000'
+
       this.setState(
         {
           user,
-          // socket: io(
-          //   process.env.NODE_ENV === 'development'
-          //     ? 'http://localhost:5000'
-          //     : ''
-          // ),
-          socket: io(),
+          socket: io('http://localhost:5000'),
         },
         () => {
           const socket = this.state.socket;
@@ -114,36 +87,39 @@ class ChatPage extends React.Component {
 
           socket.on('new_user_connected', (newUser) => {
             const users = this.state.users;
+
+            // check if the new user is allready in the state (reconnected)
             const index = users.findIndex((user) => user.id === newUser.id);
 
             if (index !== -1) {
+              // old user try to reconnect
+              // socket id has changed so we have to remove it
               const replacer = (key, value) =>
                 key === 'socket_id' ? undefined : value;
 
-              const ifSameUser =
+              const isSameUser =
                 JSON.stringify(newUser, replacer) ===
                 JSON.stringify(users[index], replacer);
 
-              // console.log('ifSameUser: ', ifSameUser);
-              // console.log(
-              //   ' JSON.stringify(newUser): ',
-              //   JSON.stringify(newUser)
-              // );
-              // console.log(
-              //   'JSON.stringify(users[index]): ',
-              //   JSON.stringify(users[index])
-              // );
+              // const companion = Object.assign({}, this.state.companion);
 
-              const companion = this.state.companion || {};
-
-              if (!ifSameUser) {
-                const messages = this.state.messages;
+              if (!isSameUser) {
+                console.log('if not same user: ', isSameUser);
+                const messages = Object.assign({}, this.state.messages);
                 delete messages[newUser.id];
-                companion.hasLeft = true;
-                this.setState({ messages, companion });
+
+                const companion = Object.assign({}, this.state.companion);
+
+                if (companion.id === newUser.id) {
+                  companion.hasLeft = true;
+                  this.setState({ companion });
+                }
+
+                this.setState({ messages });
               } else {
-                companion.hasLeft = false;
-                this.setState({ companion });
+                console.log('if same user: ', isSameUser);
+                // companion.hasLeft = false;
+                // this.setState({ companion });
               }
 
               users[index] = newUser;
@@ -153,17 +129,11 @@ class ChatPage extends React.Component {
               users.push(newUser);
             }
 
-            // console.log('users: ', users);
-
             this.setState({ users });
           });
 
           socket.on('user_disconnected', (user_id) => {
-            console.log('user_id: ', user_id);
-            console.log('this.state.user.id: ', this.state.user.id);
-
             if (user_id === this.state.user.id) {
-              console.log('return;');
               return;
             }
 
@@ -171,20 +141,20 @@ class ChatPage extends React.Component {
               (user) => user.id !== user_id
             );
 
-            const messages = this.state.messages;
+            const messages = Object.assign({}, this.state.messages);
             delete messages[user_id];
 
-            const companion = this.state.companion;
+            this.setState({ users, messages });
+
+            const companion = Object.assign({}, this.state.companion);
 
             if (
-              companion &&
-              companion.id !== this.state.user &&
+              companion.id !== this.state.user.id &&
               companion.id === user_id
             ) {
               companion.hasLeft = true;
+              this.setState({ companion });
             }
-
-            this.setState({ users, messages, companion });
           });
 
           socket.on('message', ({ companion_id, text } = {}) => {
@@ -222,11 +192,11 @@ class ChatPage extends React.Component {
   // }
 
   handleCompanionChange(newCompanion) {
-    if (this.state.companion.id !== newCompanion.id) {
-      this.setState({
-        companion: newCompanion,
-      });
-    }
+    // if (this.state.companion.id !== newCompanion.id) {
+    this.setState({
+      companion: newCompanion,
+    });
+    // }
   }
 
   handleMessageSend(text) {

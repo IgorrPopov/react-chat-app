@@ -146,4 +146,5 @@ module.exports = {
   getAllUsersWithSockets,
   findUserBySocketId,
   findUserById,
+  users,
 };

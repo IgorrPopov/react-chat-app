@@ -1,16 +1,32 @@
 import React from 'react';
-import LoginFormSelectAvatarOptionList from './LoginFormSelectAvatarOptionList';
 import $ from 'jquery';
+import { nameByRace } from 'fantasy-name-generator';
+import LoginFormSelectAvatarOptionList from './LoginFormSelectAvatarOptionList';
 import countriesList from '../utils/countries-list';
 import avatarsList from '../utils/avatars-list';
+import fantasyRacesList from '../utils/fantasy-races-list';
+
+const randomNum = (num) => Math.floor(Math.random() * num);
+
+const randomAge = randomNum(40) + 15; // from 15 to 55 max is 99
+const randomGender = randomAge % 2 === 0 ? 'female' : 'male';
+const randomName = nameByRace(
+  fantasyRacesList[randomNum(fantasyRacesList.length)],
+  { gender: randomGender }
+).slice(0, 15);
+const randomCountry = countriesList[randomNum(countriesList.length)];
+const randomAvatar =
+  avatarsList[`${randomGender}s`][
+    randomNum(avatarsList[`${randomGender}s`].length)
+  ];
 
 const defaultState = {
-  name: '',
-  gender: 'female',
-  age: 35,
-  country: 'United_States_Of_America',
-  avatar: '/images/avatars/females/05.png',
-  avatarsList: avatarsList['females'],
+  name: randomName,
+  gender: randomGender,
+  age: randomAge,
+  country: randomCountry,
+  avatar: randomAvatar,
+  avatarsList: avatarsList[`${randomGender}s`],
   errors: {},
 };
 
