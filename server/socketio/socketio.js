@@ -17,16 +17,10 @@ const socketioConnectionLogic = (server) => {
   const io = socketio(server);
   // connection
   io.on('connection', (socket) => {
-    // console.log('New socket connected: ', socket.id);
-
     socket.on('join', (user) => {
-      // console.log({ users });
-
       const { id: user_id } = user;
 
       if (isUserExists(user_id)) {
-        // console.log('if (addUserSocketId)');
-
         const newUser = addUserSocketId(user_id, socket.id);
         delete newUser.errors;
         socket.broadcast.emit('new_user_connected', newUser);
@@ -45,19 +39,10 @@ const socketioConnectionLogic = (server) => {
     });
 
     socket.on('load_connected_users', (user_id) => {
-      // console.log({ user_id });
-      // console.log('isUserExists(user_id): ', isUserExists(user_id));
-
       if (isUserExists(user_id)) {
         const allUsersWithSockets = getAllUsersWithSockets();
-        // console.log({ allUsersWithSockets });
 
         if (allUsersWithSockets.length) {
-          // console.log(
-          //   'allUsersWithSockets.filter((user) => user.socket_id !== socket.id): ',
-          //   allUsersWithSockets.filter((user) => user.socket_id !== socket.id)
-          // );
-
           socket.emit(
             'load_connected_users',
             allUsersWithSockets.filter((user) => user.socket_id !== socket.id)

@@ -21,42 +21,12 @@ class ChatPage extends React.Component {
     this.handleMessageSeen = this.handleMessageSeen.bind(this);
   }
 
-  // async checkIfUserWasDisconnect(user) {
-  //   try {
-  //     const response = await fetch('/check-user', {
-  //       method: 'post',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(user),
-  //     });
-
-  //     if (response.status !== 200) {
-  //       this.props.history.push('/', { user: false });
-  //     }
-  //   } catch (error) {
-  //     console.log('Server error occured');
-  //   }
-  // }
-
   componentDidMount() {
     const user = JSON.parse(sessionStorage.getItem('user'));
 
     if (!user) {
       this.props.history.push('/', { user: false });
     } else {
-      // this.checkIfUserWasDisconnect(user);
-
-      // window.onpopstate = () => {
-      //   // disconnect if the back button was pressed
-      //   if (this.state.socket) {
-      //     this.state.socket.disconnect();
-      //   }
-      //   this.props.history.push('/', { user: false });
-      // };
-
-      console.log('process.env.NODE_ENV', process.env.NODE_ENV);
-
-      // const socketIoUrl = process.env.NODE_ENV === 'development' : 'http://localhost:5000'
-
       this.setState(
         {
           user,
@@ -69,7 +39,6 @@ class ChatPage extends React.Component {
           socket.emit('load_connected_users', this.state.user.id);
 
           socket.on('reconnect', () => {
-            console.log('socket.on("reconnect"');
             socket.emit('join', this.state.user);
             socket.emit('load_connected_users', this.state.user.id);
           });
@@ -101,10 +70,7 @@ class ChatPage extends React.Component {
                 JSON.stringify(newUser, replacer) ===
                 JSON.stringify(users[index], replacer);
 
-              // const companion = Object.assign({}, this.state.companion);
-
               if (!isSameUser) {
-                console.log('if not same user: ', isSameUser);
                 const messages = Object.assign({}, this.state.messages);
                 delete messages[newUser.id];
 
@@ -116,10 +82,6 @@ class ChatPage extends React.Component {
                 }
 
                 this.setState({ messages });
-              } else {
-                console.log('if same user: ', isSameUser);
-                // companion.hasLeft = false;
-                // this.setState({ companion });
               }
 
               users[index] = newUser;
@@ -186,17 +148,10 @@ class ChatPage extends React.Component {
     }
   }
 
-  // componentWillUnmount() {
-  //   console.log('componentWillUnmount');
-  //   localStorage.setItem('messages', JSON.stringify(this.state.messages));
-  // }
-
   handleCompanionChange(newCompanion) {
-    // if (this.state.companion.id !== newCompanion.id) {
     this.setState({
       companion: newCompanion,
     });
-    // }
   }
 
   handleMessageSend(text) {
@@ -295,7 +250,6 @@ class ChatPage extends React.Component {
                 </a>
               </div>
             </nav>
-
             <div className="tab-content w-100" id="nav-tabContent">
               <div
                 className="tab-pane fade  w-100"

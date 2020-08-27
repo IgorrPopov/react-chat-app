@@ -10,8 +10,6 @@ const publicPath = path.join(
   `${process.env.NODE_ENV === 'development' ? 'public' : 'build'}`
 );
 
-// console.log('process.env.NODE_ENV: ', process.env.NODE_ENV);
-
 const app = express();
 app.use(express.json());
 
