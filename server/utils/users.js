@@ -110,7 +110,7 @@ const checkCountry = (country) => {
 
 const checkName = (name) => {
   name = name.trim();
-  return name.match(/^[a-zA-Z0-9 ]{1,15}$/);
+  return name.match(/^[\w -]{1,15}$/);
 };
 
 const checkGender = (gender) => {

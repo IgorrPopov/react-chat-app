@@ -52,7 +52,7 @@ class LoginForm extends React.Component {
   handleNameChange(e) {
     const name = e.target.value;
 
-    if (!name || name.match(/^[a-zA-Z0-9 ]{1,15}$/)) {
+    if (!name || name.match(/^[\w -]{1,15}$/)) {
       this.setState({ name });
     }
   }
