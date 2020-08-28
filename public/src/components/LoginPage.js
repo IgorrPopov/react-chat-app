@@ -2,15 +2,6 @@ import React from 'react';
 import LoginForm from './LoginForm';
 
 class LoginPage extends React.Component {
-  // componentDidMount() {
-  //   const isStateSent = this.props.location.state !== undefined;
-  //   const user = isStateSent ? this.props.location.state.user : false;
-
-  //   if (!user) {
-  //     this.props.history.push('/', { user: false });
-  //   }
-  // }
-
   render() {
     return (
       <div id="loginPageWrapper">

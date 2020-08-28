@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Loader from '../components/Loader';
 import LoginPage from '../components/LoginPage';
-import NotFoundPage from '../components/NotFoundPage';
 
 const ChatPage = React.lazy(() => import('../components/ChatPage'));
+const NotFoundPage = React.lazy(() => import('../components/NotFoundPage'));
+const Loader = React.lazy(() => import('../components/Loader'));
 
 const AppRouter = () => (
   <BrowserRouter>

@@ -78,7 +78,7 @@ const socketioConnectionLogic = (server) => {
       const disconnectedUser = findUserBySocketId(socket.id);
 
       addUserSocketId(disconnectedUser.id, false);
-      // check if the user reconnected after 10 seconds
+      // check if the user reconnected after 60 seconds
       setTimeout(() => {
         const user = findUserById(disconnectedUser.id);
 
@@ -86,7 +86,7 @@ const socketioConnectionLogic = (server) => {
           removeUser(user.id);
           socket.broadcast.emit('user_disconnected', user.id);
         }
-      }, 10000);
+      }, 60000);
     });
   });
 };

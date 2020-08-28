@@ -127,7 +127,6 @@ class LoginForm extends React.Component {
 
       if (response.status === 201) {
         user = await response.json();
-        // localStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('user', JSON.stringify(user));
         this.props.history.push('/chat');
       }
