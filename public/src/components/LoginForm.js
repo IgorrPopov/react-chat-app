@@ -6,7 +6,7 @@ import countriesList from '../utils/countries-list';
 import avatarsList from '../utils/avatars-list';
 import fantasyRacesList from '../utils/fantasy-races-list';
 
-const randomNum = (num) => Math.floor(Math.random() * num);
+const randomNum = num => Math.floor(Math.random() * num);
 
 const randomAge = randomNum(40) + 15; // from 15 to 55 max is 99
 const randomGender = randomAge % 2 === 0 ? 'female' : 'male';
@@ -142,47 +142,47 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleFormSubmit} className="font-weight-bold">
-        <div className="form-group my-1">
-          <label htmlFor="name">Name</label>
+      <form onSubmit={this.handleFormSubmit} className='font-weight-bold'>
+        <div className='form-group my-1'>
+          <label htmlFor='name'>Name</label>
           <input
-            type="text"
+            type='text'
             value={this.state.name}
             onChange={this.handleNameChange}
-            id="name"
-            className="form-control form-control-sm"
-            placeholder="Enter Name"
+            id='name'
+            className='form-control form-control-sm login-form-input'
+            placeholder='Enter Name'
           />
           {this.state.errors.name ? (
-            <div className="error-message">{this.state.errors.name}</div>
+            <div className='error-message'>{this.state.errors.name}</div>
           ) : null}
         </div>
-        <div className="form-group my-1">
-          <label htmlFor="gender">Gender</label>
+        <div className='form-group my-1'>
+          <label htmlFor='gender'>Gender</label>
           <select
-            id="gender"
-            className="selectpicker form-control form-control-sm show-tick"
+            id='gender'
+            className='selectpicker form-control form-control-sm show-tick login-form-input'
             value={this.state.gender}
             onChange={this.handleGenderChange}
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value='male'>Male</option>
+            <option value='female'>Female</option>
           </select>
           {this.state.errors.gender ? (
-            <div className="error-message">{this.state.errors.gender}</div>
+            <div className='error-message'>{this.state.errors.gender}</div>
           ) : null}
         </div>
-        <div className="form-group my-1">
-          <label htmlFor="country">Country</label>
+        <div className='form-group my-1'>
+          <label htmlFor='country'>Country</label>
           <select
-            id="country"
-            className="selectpicker form-control form-control-sm show-tick"
+            id='country'
+            className='selectpicker form-control form-control-sm show-tick login-form-input'
             value={this.state.country}
             onChange={this.handleCountryChange}
-            data-live-search="true"
-            data-size="5"
+            data-live-search='true'
+            data-size='5'
           >
-            {countriesList.map((country) => {
+            {countriesList.map(country => {
               return (
                 <option key={country} value={country}>
                   {country.replace(/_/g, ' ')}
@@ -191,37 +191,37 @@ class LoginForm extends React.Component {
             })}
           </select>
           {this.state.errors.country ? (
-            <div className="error-message">{this.state.errors.country}</div>
+            <div className='error-message'>{this.state.errors.country}</div>
           ) : null}
         </div>
-        <div className="form-group my-1">
-          <label htmlFor="age">Age</label>
+        <div className='form-group my-1'>
+          <label htmlFor='age'>Age</label>
           <input
-            type="number"
+            type='number'
             value={this.state.age}
-            id="age"
-            className="form-control form-control-sm"
+            id='age'
+            className='form-control form-control-sm login-form-input'
             onChange={this.handleAgeChange}
           />
           {this.state.errors.age ? (
-            <div className="error-message">{this.state.errors.age}</div>
+            <div className='error-message'>{this.state.errors.age}</div>
           ) : null}
         </div>
 
-        <div className="form-group my-2">
+        <div className='form-group my-2'>
           <LoginFormSelectAvatarOptionList
             avatar={this.state.avatar}
             avatarsList={this.state.avatarsList}
             onChange={this.handleAvatarChange}
           />
           {this.state.errors.avatar ? (
-            <div className="error-message">{this.state.errors.avatar}</div>
+            <div className='error-message'>{this.state.errors.avatar}</div>
           ) : null}
         </div>
-        <div className="form-group">
+        <div className='form-group'>
           <button
-            type="submit"
-            className="btn btn-info btn-block btn-sm font-weight-bold login-submit-button"
+            type='submit'
+            className='btn btn-info btn-block btn-sm font-weight-bold login-submit-button'
           >
             JOIN
           </button>

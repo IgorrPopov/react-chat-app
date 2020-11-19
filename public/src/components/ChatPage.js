@@ -48,17 +48,17 @@ class ChatPage extends React.Component {
             this.props.history.push('/');
           });
 
-          socket.on('load_connected_users', (connectedUsers) => {
+          socket.on('load_connected_users', connectedUsers => {
             this.setState({
               users: [...this.state.users, ...connectedUsers],
             });
           });
 
-          socket.on('new_user_connected', (newUser) => {
+          socket.on('new_user_connected', newUser => {
             const users = this.state.users;
 
             // check if the new user is allready in the state (reconnected)
-            const index = users.findIndex((user) => user.id === newUser.id);
+            const index = users.findIndex(user => user.id === newUser.id);
 
             if (index !== -1) {
               // old user try to reconnect
@@ -94,14 +94,12 @@ class ChatPage extends React.Component {
             this.setState({ users });
           });
 
-          socket.on('user_disconnected', (user_id) => {
+          socket.on('user_disconnected', user_id => {
             if (user_id === this.state.user.id) {
               return;
             }
 
-            const users = this.state.users.filter(
-              (user) => user.id !== user_id
-            );
+            const users = this.state.users.filter(user => user.id !== user_id);
 
             const messages = Object.assign({}, this.state.messages);
             delete messages[user_id];
@@ -210,66 +208,66 @@ class ChatPage extends React.Component {
 
   render() {
     return (
-      <div id="chatPageWrapper">
-        <div className="dark-overlay">
-          <div className="container mt-3 w-100">
+      <div id='chatPageWrapper'>
+        <div className='dark-overlay'>
+          <div className='container mt-3 w-100'>
             <nav>
-              <div className="nav nav-tabs" id="nav-tab" role="tablist">
+              <div className='nav nav-tabs' id='nav-tab' role='tablist'>
                 <a
-                  className="nav-item nav-link"
-                  id="nav-history-tab"
-                  data-toggle="tab"
-                  href="#nav-history"
-                  role="tab"
-                  aria-controls="nav-history"
-                  aria-selected="true"
+                  className='nav-item nav-link'
+                  id='nav-history-tab'
+                  data-toggle='tab'
+                  href='#nav-history'
+                  role='tab'
+                  aria-controls='nav-history'
+                  aria-selected='true'
                 >
                   History
                 </a>
                 <a
-                  className="nav-item nav-link active"
-                  id="nav-chat-tab"
-                  data-toggle="tab"
-                  href="#nav-chat"
-                  role="tab"
-                  aria-controls="nav-chat"
-                  aria-selected="false"
+                  className='nav-item nav-link active'
+                  id='nav-chat-tab'
+                  data-toggle='tab'
+                  href='#nav-chat'
+                  role='tab'
+                  aria-controls='nav-chat'
+                  aria-selected='false'
                 >
                   Chat
                 </a>
                 <a
-                  className="nav-item nav-link"
-                  id="nav-users-tab"
-                  data-toggle="tab"
-                  href="#nav-users"
-                  role="tab"
-                  aria-controls="nav-users"
-                  aria-selected="false"
+                  className='nav-item nav-link'
+                  id='nav-users-tab'
+                  data-toggle='tab'
+                  href='#nav-users'
+                  role='tab'
+                  aria-controls='nav-users'
+                  aria-selected='false'
                 >
                   Users
                 </a>
               </div>
             </nav>
-            <div className="tab-content w-100" id="nav-tabContent">
+            <div className='tab-content w-100' id='nav-tabContent'>
               <div
-                className="tab-pane fade  w-100"
-                id="nav-history"
-                role="tabpanel"
-                aria-labelledby="nav-history-tab"
+                className='tab-pane fade  w-100'
+                id='nav-history'
+                role='tabpanel'
+                aria-labelledby='nav-history-tab'
               >
                 <ChatUsersList
                   users={this.state.users.filter(
-                    (user) => this.state.messages[user.id] !== undefined
+                    user => this.state.messages[user.id] !== undefined
                   )}
                   handleCompanionChange={this.handleCompanionChange}
                   messages={this.state.messages}
                 />
               </div>
               <div
-                className="tab-pane fade show active"
-                id="nav-chat"
-                role="tabpanel"
-                aria-labelledby="nav-chat-tab"
+                className='tab-pane fade show active'
+                id='nav-chat'
+                role='tabpanel'
+                aria-labelledby='nav-chat-tab'
               >
                 {this.state.companion ? (
                   <ChatBox
@@ -284,10 +282,10 @@ class ChatPage extends React.Component {
                 )}
               </div>
               <div
-                className="tab-pane fade"
-                id="nav-users"
-                role="tabpanel"
-                aria-labelledby="nav-users-tab"
+                className='tab-pane fade'
+                id='nav-users'
+                role='tabpanel'
+                aria-labelledby='nav-users-tab'
               >
                 <ChatUsersList
                   users={this.state.users}

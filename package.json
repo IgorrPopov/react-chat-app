@@ -11,7 +11,7 @@
     "heroku-postbuild": "cd public && yarn install && yarn build"
   },
   "engines": {
-    "node": "12.16.3"
+    "node": "14.15.0"
   },
   "keywords": [],
   "author": "",
